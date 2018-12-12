@@ -30,7 +30,7 @@ check_sys(){
     fi
 }
 create_cb_script(){
-	sudo echo 'nc -q0 localhost 5556' >> /usr/bin/cb
+	sudo echo 'nc -q0 localhost 5556' > /usr/bin/cb
 	chmod +x /usr/bin/cb
 }
 create_cb_script
