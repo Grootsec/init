@@ -71,7 +71,7 @@ base_install(){
 	sudo $systemPackage install openssh-server -y
 }
 docker_install(){
-	pre_command curl
+	pre_install curl
 	curl -fsSL https://get.docker.com -o /tmp/docker.sh
 	sudo bash /tmp/docker.sh
 	sudo usermod -aG docker $USER
@@ -89,8 +89,8 @@ tmux_install(){
 	echo "tmux done"
 }
 zsh_install(){
-	pre_command git
-	pre_command wget
+	pre_install git
+	pre_install wget
 	echo "oh-my-zsh"
 	sudo $systemPackage install zsh figlet -y
 	sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
@@ -100,8 +100,8 @@ zsh_install(){
 	mv /tmp/zshrc ~/.zshrc
 }
 proxychains4_install(){
-	pre_command git
-	pre_command gcc
+	pre_install git
+	pre_install gcc
 	cd /tmp
 	git clone --depth=1 https://github.com/rofl0r/proxychains-ng.git
 	cd proxychains-ng
@@ -116,7 +116,7 @@ proxychains4_install(){
 	cd
 }
 vim_install(){
-	pre_command git
+	pre_install git
 	sudo $systemPackage install vim
 	curl -fsSL https://raw.githubusercontent.com/IanSmith123/dotfile/master/vimrc -o ~/.vimrc
 	vim -c 'PlugInstall' -c 'qa!'
