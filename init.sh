@@ -98,6 +98,9 @@ proxychains4_install(){
 	make
 	sudo make install
 	sudo make install-config
+	# delete proxychains.conf last 2 line
+	sed '$d' -i /etc/proxychains.conf
+	sed '$d' -i /etc/proxychains.conf
 	echo "socks5 127.0.0.1 1080 " >>/etc/proxychains.conf
 	cd
 }
