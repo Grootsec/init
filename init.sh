@@ -71,7 +71,7 @@ base_install(){
 	sudo $systemPackage install openssh-server -y
 }
 docker_install(){
-	sudo $systemPackage install curl -y
+	pre_command curl
 	curl -fsSL https://get.docker.com -o /tmp/docker.sh
 	sudo bash /tmp/docker.sh
 	sudo usermod -aG docker $USER
@@ -89,8 +89,8 @@ tmux_install(){
 	echo "tmux done"
 }
 zsh_install(){
-	sudo $systemPackage install git -y
-	sudo $systemPackage install wget -y
+	pre_command git
+	pre_command wget
 	echo "oh-my-zsh"
 	sudo $systemPackage install zsh figlet -y
 	sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
@@ -100,6 +100,8 @@ zsh_install(){
 	mv /tmp/zshrc ~/.zshrc
 }
 proxychains4_install(){
+	pre_command git
+	pre_command gcc
 	cd /tmp
 	git clone --depth=1 https://github.com/rofl0r/proxychains-ng.git
 	cd proxychains-ng
