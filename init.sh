@@ -54,6 +54,15 @@ set_color() {
 		NORMAL=""
 	fi
 }
+
+pre_install(){
+	pre_command=$1
+	if type $pre_command >/dev/null 2>&1; then 
+	  return 
+	else 
+		sudo $systemPackage install $pre_command -y
+	fi
+}
 base_install(){
 	sudo $systemPackage update -y
 	sudo $systemPackage install curl -y
@@ -105,6 +114,7 @@ proxychains4_install(){
 	cd
 }
 vim_install(){
+	pre_command git
 	sudo $systemPackage install vim
 	curl -fsSL https://raw.githubusercontent.com/IanSmith123/dotfile/master/vimrc -o ~/.vimrc
 	vim -c 'PlugInstall' -c 'qa!'
@@ -129,7 +139,7 @@ install_all(){
 printf "${GREEN} $#\n"
 if [ $# -eq 0 ]
 then
-	printf "${BLUE}base,docker,vim,zsh,tmux,docker,base_pip,all"
+	printf "${BLUE}base,docker,vim,zsh,tmux,docker,base_pip,all\n"
 	exit
 fi
 
