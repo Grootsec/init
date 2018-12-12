@@ -29,6 +29,11 @@ check_sys(){
         systemPackage="yum"
     fi
 }
+create_cb_script(){
+	sudo echo 'nc -q0 localhost 5556' >> /usr/bin/cb
+	chmod +x /usr/bin/cb
+}
+create_cb_script
 check_sys
 echo $release
 echo $systemPackage
