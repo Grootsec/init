@@ -86,7 +86,7 @@ zsh_install(){
 	sudo $systemPackage install zsh figlet -y
 	sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
 
-	curl -fsSL https://raw.githubusercontent.com/IanSmith123/dotfile/master/vimrc -o /tmp/zshrc
+	curl -fsSL https://raw.githubusercontent.com/IanSmith123/dotfile/master/zshrc -o /tmp/zshrc
 	sed -i "s@HOMEDIR@$HOME@g" /tmp/zshrc
 	mv /tmp/zshrc ~/.zshrc
 }
