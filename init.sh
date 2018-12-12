@@ -58,9 +58,9 @@ set_color() {
 pre_install(){
 	pre_command=$1
 	if type $pre_command >/dev/null 2>&1; then 
-	  return 
+	    return 
 	else 
-		sudo $systemPackage install $pre_command -y
+	    sudo $systemPackage install $pre_command -y
 	fi
 }
 base_install(){
