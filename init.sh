@@ -33,7 +33,11 @@ create_cb_script(){
     if type nc >/dev/null 2>&1; then 
         echo "nc exist"
     else 
-        sudo $systemPackage install netcat -y
+        if [[ $release -eq 'centos' ]]; then
+            sudo yum install nc -y
+        else
+            sudo $systemPackage install netcat -y
+        fi
     fi
     sudo echo 'nc -q0 localhost 5556' > /usr/bin/cb
     chmod +x /usr/bin/cb
@@ -90,8 +94,8 @@ docker_install(){
 }
 tmux_install(){
     if [[ $release -eq 'centos' ]]; then
-        sudo $systemPackage install epel-release
-        sudo $systemPackage update
+        sudo $systemPackage install epel-release -y
+        sudo $systemPackage update -y 
     fi
     echo "tmux"
     sudo $systemPackage install tmux -y
