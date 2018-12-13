@@ -89,7 +89,10 @@ docker_install(){
     curl -fsSL https://get.docker.com -o /tmp/docker.sh
     sudo bash /tmp/docker.sh
     sudo usermod -aG docker $USER
-    echo '{\n"registry-mirrors": ["https://docker.mirrors.ustc.edu.cn"]\n}'>/etc/docker/daemon.json
+    if [ ! -d /etc/docker]; then
+        mkdir /etc/docker
+    fi
+    sudo echo '{\n"registry-mirrors": ["https://docker.mirrors.ustc.edu.cn"]\n}' > /etc/docker/daemon.json
     printf "${BLUE} set docker mirror.."
 }
 tmux_install(){
@@ -116,6 +119,7 @@ zsh_install(){
 proxychains4_install(){
     pre_install git
     pre_install gcc
+    pre_install make
     cd /tmp
     git clone --depth=1 https://github.com/rofl0r/proxychains-ng.git
     cd proxychains-ng
