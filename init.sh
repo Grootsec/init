@@ -87,7 +87,7 @@ base_install(){
 docker_install(){
     pre_install curl
     curl -fsSL https://get.docker.com -o /tmp/docker.sh
-    sudo bash /tmp/docker.sh
+    sudo bash /tmp/docker.sh --mirror AzureChinaCloud
     sudo usermod -aG docker $USER
     if [ ! -d /etc/docker]; then
         mkdir /etc/docker
@@ -135,7 +135,7 @@ proxychains4_install(){
 }
 vim_install(){
     pre_install git
-    sudo $systemPackage install vim
+    sudo $systemPackage install vim -y
     curl -fsSL https://raw.githubusercontent.com/IanSmith123/dotfile/master/vimrc -o ~/.vimrc
     vim -c 'PlugInstall' -c 'qa!'
 }
@@ -147,12 +147,12 @@ pip_install(){
 }
 install_all(){
     base_install
-    zsh_install
     docker_install
     tmux_install
     vim_install
     # pip_install # i think this will be a huge bug, so temp annotation
     proxychains4_install
+    zsh_install
 }
 # 添加颜色
 # set_color
