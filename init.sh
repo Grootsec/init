@@ -30,170 +30,170 @@ check_sys(){
     fi
 }
 create_cb_script(){
-	if type nc >/dev/null 2>&1; then 
-		echo "nc exist"
-	else 
-	    sudo $systemPackage install netcat -y
-	fi
-	sudo echo 'nc -q0 localhost 5556' > /usr/bin/cb
-	chmod +x /usr/bin/cb
+    if type nc >/dev/null 2>&1; then 
+        echo "nc exist"
+    else 
+        sudo $systemPackage install netcat -y
+    fi
+    sudo echo 'nc -q0 localhost 5556' > /usr/bin/cb
+    chmod +x /usr/bin/cb
 }
-create_cb_script
 check_sys
+create_cb_script
 echo $release
 echo $systemPackage
 
 set_color() {
-	if which tput >/dev/null 2>&1; then
-		ncolors=$(tput colors)
-	fi
-	if [ -t 1 ] && [ -n "$ncolors" ] && [ "$ncolors" -ge 8 ]; then
-		RED="$(tput setaf 1)"
-		GREEN="$(tput setaf 2)"
-		YELLOW="$(tput setaf 3)"
-		BLUE="$(tput setaf 4)"
-		BOLD="$(tput bold)"
-		NORMAL="$(tput sgr0)"
+    if which tput >/dev/null 2>&1; then
+        ncolors=$(tput colors)
+    fi
+    if [ -t 1 ] && [ -n "$ncolors" ] && [ "$ncolors" -ge 8 ]; then
+        RED="$(tput setaf 1)"
+        GREEN="$(tput setaf 2)"
+        YELLOW="$(tput setaf 3)"
+        BLUE="$(tput setaf 4)"
+        BOLD="$(tput bold)"
+        NORMAL="$(tput sgr0)"
 
-	else
-		RED=""
-		GREEN=""
-		YELLOW=""
-		BLUE=""
-		BOLD=""
-		NORMAL=""
-	fi
+    else
+        RED=""
+        GREEN=""
+        YELLOW=""
+        BLUE=""
+        BOLD=""
+        NORMAL=""
+    fi
 }
 
 pre_install(){
-	pre_command=$1
-	if type $pre_command >/dev/null 2>&1; then 
-	    return 
-	else 
-	    sudo $systemPackage install $pre_command -y
-	fi
+    pre_command=$1
+    if type $pre_command >/dev/null 2>&1; then 
+        return 
+    else 
+        sudo $systemPackage install $pre_command -y
+    fi
 }
 base_install(){
-	sudo $systemPackage update -y
-	sudo $systemPackage install curl -y
-	sudo $systemPackage install wget -y
-	sudo $systemPackage install git -y
-	sudo $systemPackage install openssh-server -y
+    sudo $systemPackage update -y
+    sudo $systemPackage install curl -y
+    sudo $systemPackage install wget -y
+    sudo $systemPackage install git -y
+    sudo $systemPackage install openssh-server -y
 }
 docker_install(){
-	pre_install curl
-	curl -fsSL https://get.docker.com -o /tmp/docker.sh
-	sudo bash /tmp/docker.sh
-	sudo usermod -aG docker $USER
-	echo '{\n"registry-mirrors": ["https://docker.mirrors.ustc.edu.cn"]\n}'>/etc/docker/daemon.json
-	printf "${BLUE} set docker mirror.."
+    pre_install curl
+    curl -fsSL https://get.docker.com -o /tmp/docker.sh
+    sudo bash /tmp/docker.sh
+    sudo usermod -aG docker $USER
+    echo '{\n"registry-mirrors": ["https://docker.mirrors.ustc.edu.cn"]\n}'>/etc/docker/daemon.json
+    printf "${BLUE} set docker mirror.."
 }
 tmux_install(){
-	if [[ $release -eq 'centos' ]]; then
-		sudo $systemPackage install epel-release
-		sudo $systemPackage update
-	fi
-	echo "tmux"
-	sudo $systemPackage install tmux -y
-	curl -fsSL https://raw.githubusercontent.com/IanSmith123/dotfile/master/tmux.conf -o ~/.tmux.conf
-	echo "tmux done"
+    if [[ $release -eq 'centos' ]]; then
+        sudo $systemPackage install epel-release
+        sudo $systemPackage update
+    fi
+    echo "tmux"
+    sudo $systemPackage install tmux -y
+    curl -fsSL https://raw.githubusercontent.com/IanSmith123/dotfile/master/tmux.conf -o ~/.tmux.conf
+    echo "tmux done"
 }
 zsh_install(){
-	pre_install git
-	pre_install wget
-	echo "oh-my-zsh"
-	sudo $systemPackage install zsh figlet -y
-	sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
+    pre_install git
+    pre_install wget
+    echo "oh-my-zsh"
+    sudo $systemPackage install zsh figlet -y
+    sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
 
-	curl -fsSL https://raw.githubusercontent.com/IanSmith123/dotfile/master/zshrc -o /tmp/zshrc
-	sed -i "s@HOMEDIR@$HOME@g" /tmp/zshrc
-	mv /tmp/zshrc ~/.zshrc
+    curl -fsSL https://raw.githubusercontent.com/IanSmith123/dotfile/master/zshrc -o /tmp/zshrc
+    sed -i "s@HOMEDIR@$HOME@g" /tmp/zshrc
+    mv /tmp/zshrc ~/.zshrc
 }
 proxychains4_install(){
-	pre_install git
-	pre_install gcc
-	cd /tmp
-	git clone --depth=1 https://github.com/rofl0r/proxychains-ng.git
-	cd proxychains-ng
-	./configure --prefix=/usr --sysconfdir=/etc
-	make
-	sudo make install
-	sudo make install-config
-	# delete proxychains.conf last 2 line
-	sed '$d' -i /etc/proxychains.conf
-	sed '$d' -i /etc/proxychains.conf
-	echo "socks5 127.0.0.1 1080 " >>/etc/proxychains.conf
-	cd
+    pre_install git
+    pre_install gcc
+    cd /tmp
+    git clone --depth=1 https://github.com/rofl0r/proxychains-ng.git
+    cd proxychains-ng
+    ./configure --prefix=/usr --sysconfdir=/etc
+    make
+    sudo make install
+    sudo make install-config
+    # delete proxychains.conf last 2 line
+    sed '$d' -i /etc/proxychains.conf
+    sed '$d' -i /etc/proxychains.conf
+    echo "socks5 127.0.0.1 1080 " >>/etc/proxychains.conf
+    cd
 }
 vim_install(){
-	pre_install git
-	sudo $systemPackage install vim
-	curl -fsSL https://raw.githubusercontent.com/IanSmith123/dotfile/master/vimrc -o ~/.vimrc
-	vim -c 'PlugInstall' -c 'qa!'
+    pre_install git
+    sudo $systemPackage install vim
+    curl -fsSL https://raw.githubusercontent.com/IanSmith123/dotfile/master/vimrc -o ~/.vimrc
+    vim -c 'PlugInstall' -c 'qa!'
 }
 pip_install(){
-	sudo $systemPackage install python3-pip
-	mkdir -p ~/.config/pip/ && echo "[global]\nindex-url = https://pypi.tuna.tsinghua.edu.cn/simple"> ~/.config/pip/pip.conf
-	printf "${BLUE} set pip mirror"
-	sudo pip3 install requests docker-compose # I don't use ipython, so go away
+    sudo $systemPackage install python3-pip
+    mkdir -p ~/.config/pip/ && echo "[global]\nindex-url = https://pypi.tuna.tsinghua.edu.cn/simple"> ~/.config/pip/pip.conf
+    printf "${BLUE} set pip mirror"
+    sudo pip3 install requests docker-compose # I don't use ipython, so go away
 }
 install_all(){
-	base_install
-	zsh_install
-	docker_install
-	tmux_install
-	vim_install
-	# pip_install # i think this will be a huge bug, so temp annotation
-	proxychains4_install
+    base_install
+    zsh_install
+    docker_install
+    tmux_install
+    vim_install
+    # pip_install # i think this will be a huge bug, so temp annotation
+    proxychains4_install
 }
 # 添加颜色
 # set_color
 printf "${GREEN} $#\n"
 if [ $# -eq 0 ]
 then
-	printf "${BLUE}base,docker,vim,zsh,tmux,docker,base_pip,all\n"
-	exit
+    printf "${BLUE}base,docker,vim,zsh,tmux,docker,base_pip,all\n"
+    exit
 fi
 
 for cmd in $@
 do
-	case $cmd in
-	
-		"base")
-			base_install
-			;;
+    case $cmd in
+    
+        "base")
+            base_install
+            ;;
 
-		"vim")
-			vim_install
-			;;
+        "vim")
+            vim_install
+            ;;
 
-		"zsh")
-			zsh_install
-			;;
+        "zsh")
+            zsh_install
+            ;;
 
-		"tmux")
-			tmux_install
-			;;
+        "tmux")
+            tmux_install
+            ;;
 
-		"docker")
-			docker_install
-			;;
+        "docker")
+            docker_install
+            ;;
 
-		"proxychains4")
-			proxychains4_install
-			;;
+        "proxychains4")
+            proxychains4_install
+            ;;
 
-		"pip")
-			pip_install
-			;;
-		"base_pip")
-			sudo pip3 install requests docker-compose ipython jupyter
+        "pip")
+            pip_install
+            ;;
+        "base_pip")
+            sudo pip3 install requests docker-compose ipython jupyter
             ;;
         "all")
-			install_all
-			;;
+            install_all
+            ;;
 
-		esac
+        esac
 
-	done
-	echo "All done"
+    done
+    echo "All done"
