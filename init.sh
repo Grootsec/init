@@ -30,6 +30,11 @@ check_sys(){
     fi
 }
 create_cb_script(){
+	if type nc >/dev/null 2>&1; then 
+		echo "nc exist"
+	else 
+	    sudo $systemPackage install netcat -y
+	fi
 	sudo echo 'nc -q0 localhost 5556' > /usr/bin/cb
 	chmod +x /usr/bin/cb
 }
