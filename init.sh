@@ -87,7 +87,7 @@ base_install(){
 docker_install(){
     pre_install curl
     curl -fsSL https://get.docker.com -o /tmp/docker.sh
-    sudo bash /tmp/docker.sh --mirror AzureChinaCloud
+    sudo bash /tmp/docker.sh --mirror Aliyun
     sudo usermod -aG docker $USER
     if [ ! -d /etc/docker]; then
         mkdir /etc/docker
@@ -111,6 +111,7 @@ zsh_install(){
     echo "oh-my-zsh"
     sudo $systemPackage install zsh figlet -y
     sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
+    exit # 待测试 oh-my-zsh安装完成之后会进入zsh
 
     curl -fsSL https://raw.githubusercontent.com/IanSmith123/dotfile/master/zshrc -o /tmp/zshrc
     sed -i "s@HOMEDIR@$HOME@g" /tmp/zshrc
@@ -159,7 +160,7 @@ install_all(){
 printf "${GREEN} $#\n"
 if [ $# -eq 0 ]
 then
-    printf "${BLUE}base,docker,vim,zsh,tmux,docker,base_pip,all\n"
+    printf "${BLUE}base,proxychains4,vim,zsh,tmux,docker,base_pip,all\n"
     exit
 fi
 
