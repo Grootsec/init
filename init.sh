@@ -115,8 +115,6 @@ zsh_install(){
     sed -i "s@HOMEDIR@$HOME@g" /tmp/zshrc
     mv /tmp/zshrc ~/.zshrc
     chsh -s /bin/zsh
-    # 启动zsh
-    env zsh -l
 }
 proxychains4_install(){
     pre_install git
@@ -151,10 +149,10 @@ install_all(){
     base_install
     docker_install
     tmux_install
+    zsh_install # zsh install 必须在vim之前
     vim_install
     # pip_install # i think this will be a huge bug, so temp annotation
     proxychains4_install
-    zsh_install
 }
 # 添加颜色
 # set_color
