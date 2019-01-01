@@ -153,6 +153,7 @@ install_all(){
     vim_install
     # pip_install # i think this will be a huge bug, so temp annotation
     proxychains4_install
+    env zsh -l
 }
 # 添加颜色
 # set_color
