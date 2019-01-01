@@ -110,12 +110,13 @@ zsh_install(){
     pre_install wget
     echo "oh-my-zsh"
     sudo $systemPackage install zsh figlet -y
-    sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
-    exit # 待测试 oh-my-zsh安装完成之后会进入zsh
-
+    git clone --depth=1 https://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh
     curl -fsSL https://raw.githubusercontent.com/IanSmith123/dotfile/master/zshrc -o /tmp/zshrc
     sed -i "s@HOMEDIR@$HOME@g" /tmp/zshrc
     mv /tmp/zshrc ~/.zshrc
+    chsh -s /bin/zsh
+    # 启动zsh
+    env zsh -l
 }
 proxychains4_install(){
     pre_install git
