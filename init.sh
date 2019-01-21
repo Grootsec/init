@@ -83,6 +83,7 @@ base_install(){
     sudo $systemPackage install wget -y
     sudo $systemPackage install git -y
     sudo $systemPackage install openssh-server -y
+    curl https://getcaddy.com | bash
 }
 docker_install(){
     pre_install curl
@@ -145,6 +146,7 @@ pip_install(){
     printf "${BLUE} set pip mirror"
     sudo pip3 install requests docker-compose # I don't use ipython, so go away
 }
+
 install_all(){
     base_install
     docker_install
@@ -160,7 +162,7 @@ install_all(){
 printf "${GREEN} $#\n"
 if [ $# -eq 0 ]
 then
-    printf "${BLUE}base,proxychains4,vim,zsh,tmux,docker,base_pip,all\n"
+    printf "${BLUE}caddy,base,proxychains4,vim,zsh,tmux,docker,base_pip,all\n"
     exit
 fi
 
